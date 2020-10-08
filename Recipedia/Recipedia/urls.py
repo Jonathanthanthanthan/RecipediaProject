@@ -15,20 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-'''This method takes the inputs from the LoginForm text fields and checks if password is associated with the username.
 
-           Args:
-                username (String) : The username that will be used to retrieve an assocated password hash.
-
-                password (String) : The password that will be turned into a hash and be compared with the usernames associated password hash.
-
-           Returns:
-                   True if the password that was passed matches the password assosicated with the username that was passed.
-
-                   False if the password that was passed does not match the password associated wiht the username that was passed.
-
-
-'''
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
