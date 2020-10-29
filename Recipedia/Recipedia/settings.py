@@ -77,12 +77,8 @@ WSGI_APPLICATION = 'Recipedia.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'recipediabase',
-	'USER':'RecipediaAdmin',
-	'PASSWORD': 'CMPE133',
-	'PORT': 3306,
-	'HOST': '127.0.0.1'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 
