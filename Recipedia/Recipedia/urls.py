@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from RecipeSearcher import views
+import RecipeSearcher
 
 urlpatterns = [
+    path('', RecipeSearcher.views.home),
     path('admin/', admin.site.urls),
-    path('RecipeSearcher/',include('RecipeSearcher.urls', namespace='RecipeSearcher') )
-
+    path('RecipeSearcher/',include('RecipeSearcher.urls', namespace='RecipeSearcher') ),
 ]

@@ -8,3 +8,6 @@ def login(request):
 
 def results(request):
     return render(request,'results.html')
+
+def base(request):
+    return render(request,'base.html')
