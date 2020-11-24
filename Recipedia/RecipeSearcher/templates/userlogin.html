@@ -2,12 +2,41 @@
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
     <div class="container">
-        <h4>Login Information</h4>
-        <form  text-align:center ; method="post">
-            {{ form.as_p }}
-            {% csrf_token %}
-            <p><input type="submit" value="Log in"></p>
-        </form>
+        <div class="checkout__form">
+            <form method="post">
+                <div class="row justify-content-md-center">
+                    <div class="col">
+                        <div class="row justify-content-md-center">
+                            <h4>Login Information</h4>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-md-6">
+                                <div class="checkout__input">
+                                    <p>Username
+                                        <span>*</span>
+                                    </p>
+                                    {{ form.username }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Password
+                                        <span>*</span>
+                                    </p>
+                                    {{ form.password }}
+                                    {% csrf_token %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <p><input type="submit" class="site-btn" value="Log in"></p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </section>
 <!-- Checkout Section End -->

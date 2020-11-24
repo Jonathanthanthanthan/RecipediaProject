@@ -1,9 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="post">
-    {{ user_form.as_p }}
+<div class="container">
+    <div class="checkout__form">
+        <form method="post">
+            <div class="row justify-content-md-center">
+                <div class="col">
+                    <div class="row justify-content-md-center">
+                        <h4>Create Account</h4>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-6">
+                            <div class="checkout__input">
+                                <p>Username
+                                    <span>*</span>
+                                </p>
+                                {{ user_form.username }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout__input">
+                                <p>First name
+                                    <span>*</span>
+                                </p>
+                                {{user_form.first_name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="checkout__input">
+                                <p>Email
+                                    <span>*</span>
+                                </p>
+                                {{ user_form.email}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="checkout__input">
+                                <p>Password
+                                    <span>*</span>
+                                </p>
+                                {{ user_form.password}}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="checkout__input">
+                                <p>Repeat Password
+                                    <span>*</span>
+                                </p>
+                                {{ user_form.password2}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <p><input type="submit" class="site-btn" value="Create my account"></p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</section>    
     {% csrf_token %}
-    <p><input type="submit" value="Create my account"></p>
-    </form>
  {% endblock %}
