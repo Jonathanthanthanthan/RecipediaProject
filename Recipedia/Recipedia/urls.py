@@ -15,11 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from RecipeSearcher import views
+from django.conf import settings
 import RecipeSearcher
+from RecipeSearcher import views
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', RecipeSearcher.views.home),
     path('admin/', admin.site.urls),
     path('RecipeSearcher/',include('RecipeSearcher.urls', namespace='RecipeSearcher') ),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT)

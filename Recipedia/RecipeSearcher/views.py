@@ -1,7 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
-from .forms import LoginForm, UserRegistrationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm
+from .models import Profile
 
 def home(request):
     return render(request, 'index.html' )
@@ -40,7 +43,32 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
+            Profile.objects.create(user=new_user)
             return render(request,'register_done.html',{'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
     return render(request,'register.html',{'user_form': user_form})
+
+
+def profile(request, searchedUser):
+    searchedUser = get_object_or_404(User,username=searchedUser)
+
+    if searchedUser is not None:
+        return render(request, 'profile.html', {'searchedUser':searchedUser})
+    else:
+        response=redirect('register')
+        return response
+
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+    else:
+        user_form = UserEditForm(instance = request.user) 
+        profile_form = ProfileEditForm(instance = request.user.profile)
+    return render(request, 'edit.html', {'user_form':user_form, 'profile_form': profile_form})
