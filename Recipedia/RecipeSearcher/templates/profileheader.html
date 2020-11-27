@@ -1,0 +1,51 @@
+{% load static %}
+
+{% block content %}
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" type="text/css">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="content" class="content content-full-width">
+                <!-- begin profile -->
+                <div class="profile">
+                    <div class="profile-header">
+                        <!-- BEGIN profile-header-cover -->
+                        <div class="profile-header-cover"></div>
+                        <!-- END profile-header-cover -->
+                        <!-- BEGIN profile-header-content -->
+                        <div class="profile-header-content">
+                            <!-- BEGIN profile-header-img -->
+                            <div class="profile-header-img">
+                                <img src={{searchedUser.profile.photo.url}} alt="">
+                            </div>
+                            <!-- END profile-header-img -->
+                            <!-- BEGIN profile-header-info -->
+                            <div class="profile-header-info">
+                                <h4 class="m-t-10 m-b-5">{{searchedUser.first_name}}</h4>
+                                <h3 class="m-t-10 m-b-5">{{searchedUser.username}}</h3>
+                                <p class="m-b-10">{{searchedUser.bio}}</p>
+                                {% if request.user.username == searchedUser.username %}
+                                <a href="RecipeSearcher/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                                {% endif %}
+                            </div>
+                            <!-- END profile-header-info -->
+                        </div>
+                        <!-- END profile-header-content -->
+                        <!-- BEGIN profile-header-tab -->
+                        <ul class="profile-header-tab nav nav-tabs">
+                            <li class="nav-item"><a href="#profile-post" class="nav-link active show" data-toggle="tab">POSTS</a></li>
+                            <li class="nav-item"><a href="#profile-about" class="nav-link" data-toggle="tab">ABOUT</a></li>
+                            <li class="nav-item"><a href="#profile-photos" class="nav-link" data-toggle="tab">PHOTOS</a></li>
+                            <li class="nav-item"><a href="recipeSearcher/edit" class="nav-link" data-toggle="tab">EDIT</a></li>
+                            <li class="nav-item"><a href="#profile-friends" class="nav-link" data-toggle="tab">FRIENDS</a></li>
+                        </ul>
+                        <!-- END profile-header-tab -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end profile -->
+{% endblock %}

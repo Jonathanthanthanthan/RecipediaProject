@@ -52,7 +52,6 @@ def register(request):
 
 def profile(request, searchedUser):
     searchedUser = get_object_or_404(User,username=searchedUser)
-
     if searchedUser is not None:
         return render(request, 'profile.html', {'searchedUser':searchedUser})
     else:
