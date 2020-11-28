@@ -24,7 +24,7 @@
                             <div class="profile-header-info">
                                 <h4 class="m-t-10 m-b-5">{{request.user.first_name}}</h4>
                                 <h4 class="m-t-10 m-b-5">{{request.user.username}}</h4>
-                                <p class="m-b-10">{{request.user.bio}}</p>
+                                <p class="m-b-10">{{request.user.profile.bio}}</p>
                                 <a href="/RecipeSearcher/{{request.user.first_name}}/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
                             </div>
                             <!-- END profile-header-info -->

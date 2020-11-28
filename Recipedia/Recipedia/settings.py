@@ -32,13 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+     'RecipeSearcher.apps.RecipesearcherConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'RecipeSearcher.apps.RecipesearcherConfig'
+    'django.contrib.staticfiles'
+   
 ]
 
 MIDDLEWARE = [
@@ -121,6 +122,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILE_DIR=[os.path.join(BASE_DIR,'static')]
+
+LOGOUT_URL = 'logout'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

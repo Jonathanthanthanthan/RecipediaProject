@@ -55,6 +55,7 @@
                                 {% if request.user.is_authenticated %}
                                 Hello, {{ request.user.first_name }}
                                 <a href="/RecipeSearcher/{{request.user.username}}">profile</a>
+                                <a href="/RecipeSearcher/logout">Logout</a>
                                 {% else %}
                                 <a href="/RecipeSearcher/login"><i class="fa fa-user"></i> Login</a>
                                 {% endif %}

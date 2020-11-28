@@ -18,7 +18,7 @@ def userlogin(request):
             if user is not None:
                 if user.is_active:
                     login(request,user)
-                    return HttpResponse('Authenticated ' 'successfully')
+                    return render (request,'index.html')
                 else:
                     return HttpResponse('Disabled account')
             else:
@@ -48,7 +48,6 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request,'register.html',{'user_form': user_form})
-
 
 def profile(request, searchedUser):
     searchedUser = get_object_or_404(User,username=searchedUser)

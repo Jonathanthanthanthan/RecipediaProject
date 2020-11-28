@@ -24,9 +24,9 @@
                             <div class="profile-header-info">
                                 <h4 class="m-t-10 m-b-5">{{searchedUser.first_name}}</h4>
                                 <h3 class="m-t-10 m-b-5">{{searchedUser.username}}</h3>
-                                <p class="m-b-10">{{searchedUser.bio}}</p>
+                                <p class="m-b-10">{{searchedUser.profile.bio}}</p>
                                 {% if request.user.username == searchedUser.username %}
-                                <a href="RecipeSearcher/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                                <a href="/RecipeSearcher/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
                                 {% endif %}
                             </div>
                             <!-- END profile-header-info -->
