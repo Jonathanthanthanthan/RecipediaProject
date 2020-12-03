@@ -17,7 +17,11 @@
                         <div class="profile-header-content">
                             <!-- BEGIN profile-header-img -->
                             <div class="profile-header-img">
-                                <img src={{searchedUser.profile.photo.url}} alt="">
+                                {% if searchedUser.profile.photo%}
+                                <img src= {{searchedUser.profile.photo.url}}  alt="">
+                                {% else %}
+                                <img src="{% static 'img/blog/default_profile.jpg' %}"  alt="">
+                                {% endif %}
                             </div>
                             <!-- END profile-header-img -->
                             <!-- BEGIN profile-header-info -->
