@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
-
+from django.core.mail import send_mail
+from datetime import date
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     bio=models.TextField(max_length=256, blank=True, null=True)
@@ -9,6 +10,7 @@ class Profile(models.Model):
     
     def __str__(self):
         return f'Profile for user {self.user.username}'
+
 
 
 

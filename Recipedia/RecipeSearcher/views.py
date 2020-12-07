@@ -3,8 +3,10 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm
 from .models import Profile
+from datetime import date
 
 def home(request):
     return render(request, 'index.html' )
@@ -18,6 +20,7 @@ def userlogin(request):
             if user is not None:
                 if user.is_active:
                     login(request,user)
+                    
                     return render (request,'index.html')
                 else:
                     return HttpResponse('Disabled account')
@@ -44,6 +47,10 @@ def register(request):
             # Save the User object
             new_user.save()
             Profile.objects.create(user=new_user)
+            subject='Recipedia account creation'
+            message='Thank you, '+ new_user.first_name+' for creating an account at Recipedia. Your account was created on ' + date.today().strftime("%m/%d/%y") + ". Now that you're registered you can start searching for recipes or upload your own!"
+            email=new_user.email
+            send_mail(subject,message,email,[email])
             return render(request,'register_done.html',{'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
