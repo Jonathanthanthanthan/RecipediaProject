@@ -6,15 +6,16 @@ from .models import Post, Comment
 
 
 @admin.register(Post)
-class PostAdmin(models.Post):
-    list_display = ('title','publisher','postdate','status','slug')
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('title','publish','postdate','status','slug', 'photo')
     #ordering and searching function
     search_fields = ('title', 'body')
     ordering = ('status', 'publish')
     list_filter = ('status', 'created', 'publish', 'author')
     prepopulated_fields = {'slug': ('title',)}
     raw_id_fields = ('author',)
-    date_hierarchy = 'publish' ordering = ('status', 'publish')
+    date_hierarchy = 'publish' 
+    ordering = ('status', 'publish')
 
 #manage comments through a simple interface.
 @admin.register(Comment)

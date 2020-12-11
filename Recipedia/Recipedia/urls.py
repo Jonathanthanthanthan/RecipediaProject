@@ -18,12 +18,15 @@ from django.urls import path, include
 from django.conf import settings
 import RecipeSearcher
 from RecipeSearcher import views
+import RecipediaPost
+from RecipediaPost import views
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', RecipeSearcher.views.home),
     path('admin/', admin.site.urls),
+    path('', RecipeSearcher.views.home),
     path('RecipeSearcher/',include('RecipeSearcher.urls', namespace='RecipeSearcher') ),
+    path('Blog/',include('RecipediaPost.urls', namespace='Blog') ),
 ]
 
 if settings.DEBUG:

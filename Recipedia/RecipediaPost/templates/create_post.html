@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+            <form method="post" enctype="multipart/form-data">
+
+                {{form.photo}}
+                {{form.title}}
+                {{form.body}}
+                {{form.status}}
+                {% csrf_token %}
+                <div class="row justify-content-md-center">
+                    <p><input type="submit" class="site-btn" value="Save changes"></p>
+                </div>
+            </form>
+            <!-- end profile-content -->
+        </div>
+    </div>
+</div>
+
+{% endblock %}

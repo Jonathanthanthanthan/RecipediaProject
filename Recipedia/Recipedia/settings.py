@@ -32,8 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-     'RecipeSearcher.apps.RecipesearcherConfig',
-    'django.contrib.admin',
+     'django.contrib.admin',
+    'RecipeSearcher.apps.RecipesearcherConfig',
+    'RecipediaPost.apps.RecipediaPostCongig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
