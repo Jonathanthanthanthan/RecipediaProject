@@ -31,7 +31,7 @@ def create_post(request):
              # Create a new post object but avoid saving it yet
             new_post = form.save(commit=False)
             new_post.author=request.user
-            new_post.author_name=request.user.first_name
+            new_post.author_name=request.user.username
             new_post.save()
             return redirect(new_post.get_absolute_url())
     else:

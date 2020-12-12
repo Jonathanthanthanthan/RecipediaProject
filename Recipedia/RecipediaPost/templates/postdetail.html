@@ -4,6 +4,8 @@
 <p class="date">
     Published {{ post.publish }} by {{ post.author }}
 </p>
-<img src={{post.photo.url}} alt="Italian Trulli">
+{% if post.photo%}
+<img src={{post.photo.url}} alt="">
+{% endif %}
 {{ post.body|linebreaks }}
-   {% endblock %}
+  {% endblock %}

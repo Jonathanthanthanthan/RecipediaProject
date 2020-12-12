@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm
 from .models import Profile
 from datetime import date
+from RecipediaPost.models import Post
 
 def home(request):
     return render(request, 'index.html' )
@@ -58,8 +59,11 @@ def register(request):
 
 def profile(request, searchedUser):
     searchedUser = get_object_or_404(User,username=searchedUser)
+
+    posts = Post.published.get_queryset(searchedUser)
+
     if searchedUser is not None:
-        return render(request, 'profile.html', {'searchedUser':searchedUser})
+        return render(request, 'profile/profile.html', {'searchedUser':searchedUser, 'posts':posts})
     else:
         response=redirect('register')
         return response
@@ -76,4 +80,4 @@ def edit(request):
     else:
         user_form = UserEditForm(instance = request.user) 
         profile_form = ProfileEditForm(instance = request.user.profile)
-    return render(request, 'edit.html', {'user_form':user_form, 'profile_form': profile_form})
+    return render(request, 'profile/edit.html', {'user_form':user_form, 'profile_form': profile_form})

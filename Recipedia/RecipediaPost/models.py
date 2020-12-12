@@ -46,7 +46,7 @@ class Post(models.Model):
                args=[self.publish.year,
                      self.publish.month,
                      self.publish.day,
-                     self.author_name,
+                     self.author,
                      self.slug])
 
     def save(self, *args, **kwargs):
