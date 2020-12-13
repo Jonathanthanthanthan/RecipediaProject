@@ -12,7 +12,7 @@ urlpatterns = [
     path('register/', views.register),
     path('edit/', views.edit),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('<searchedUser>/', views.profile)
-   
-    
+    path('<searchedUser>/', views.profile),
+    path('<searchedUser>/followers/', views.followers_list, name='followers_list'),
+    path('users/follow/', views.user_follow, name='user_follow'),
 ]

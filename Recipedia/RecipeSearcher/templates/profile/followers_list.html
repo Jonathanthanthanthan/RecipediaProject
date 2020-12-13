@@ -1,4 +1,7 @@
+{% extends "base.html" %}
 {% load static %}
+
+{% block content %}
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}" type="text/css">
@@ -36,7 +39,7 @@
                                     <span class="total">{{ total_followers }}</span>
                                     follower{{ total_followers|pluralize }}
                                 </span>
-                                <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="followbutton">
+                                <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
                                     {% if request.user not in user.followers.all %}
                                     Follow
                                     {% else %}
@@ -61,6 +64,31 @@
         </div>
     </div>
 </div>
-<!-- end profile -->
 
 
+{%for f in user.followers.all%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="people-nearby">
+              
+              <div class="nearby-user">
+                <div class="row">
+                  <div class="col-md-2 col-sm-2">
+                    <img src={{f.profile.photo.url}} alt="user" class="profile-photo-lg">
+                  </div>
+                  <div class="col-md-7 col-sm-7">
+                    <h5><a href="/RecipeSearcher/{{f.username}}" class="profile-link">{{f.username}}</a></h5>
+                    <p>{{f.profile.bio}}</p>
+                  </div>
+                  <div class="col-md-3 col-sm-3">
+                  </div>
+                </div>
+              </div>
+            </div>
+    	</div>
+	</div>
+</div>
+{% endfor %}
+
+{% endblock %}
