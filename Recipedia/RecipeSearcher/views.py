@@ -60,7 +60,6 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request,'register.html',{'user_form': user_form})
 
-
 def profile(request, searchedUser):
     user = get_object_or_404(User,username=searchedUser)
     posts = Post.published.get_queryset(user)
@@ -106,3 +105,4 @@ def user_follow(request):
         except User.DoesNotExist:
             return JsonResponse({'status':'error'})
     return JsonResponse({'status':'error'})
+

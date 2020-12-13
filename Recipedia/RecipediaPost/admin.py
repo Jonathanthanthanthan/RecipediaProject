@@ -20,6 +20,6 @@ class PostAdmin(admin.ModelAdmin):
 #manage comments through a simple interface.
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'email', 'post', 'created', 'active')
+    list_display = ('user', 'email', 'post', 'created', 'active')
     list_filter = ('active', 'created', 'updated')
-    search_fields = ('name', 'email', 'body')
+    search_fields = ('user', 'email', 'body')

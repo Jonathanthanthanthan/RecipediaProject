@@ -12,6 +12,13 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from django.urls import reverse_lazy
+
+
+ABSOLUTE_URL_OVERRIDES = {
+'auth.user': lambda u: reverse_lazy('RecipeSearcher:profile_page',
+args=[u.username])
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,3 +141,4 @@ EMAIL_HOST_USER = 'RecipeSearcher.recipedia@gmail.com'
 EMAIL_HOST_PASSWORD = 'CMPE133!'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
