@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -9,6 +9,9 @@ from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditFor
 from .models import Profile
 from datetime import date
 from RecipediaPost.models import Post
+from django.views.decorators.http import require_POST
+from common.decorators import ajax_required
+
 
 def home(request):
 
@@ -74,12 +77,11 @@ def register(request):
     return render(request,'register.html',{'user_form': user_form})
 
 def profile(request, searchedUser):
-    searchedUser = get_object_or_404(User,username=searchedUser)
-
-    posts = Post.published.get_queryset(searchedUser)
+    user = get_object_or_404(User,username=searchedUser)
+    posts = Post.published.get_queryset(user)
 
     if searchedUser is not None:
-        return render(request, 'profile/profile.html', {'searchedUser':searchedUser, 'posts':posts})
+        return render(request, 'profile/profile.html', {'user':user, 'posts':posts})
     else:
         response=redirect('register')
         return response
@@ -97,3 +99,29 @@ def edit(request):
         user_form = UserEditForm(instance = request.user)
         profile_form = ProfileEditForm(instance = request.user.profile)
     return render(request, 'profile/edit.html', {'user_form':user_form, 'profile_form': profile_form})
+<<<<<<< HEAD
+=======
+
+def followers_list (request, searchedUser):
+    user = get_object_or_404(User,username=searchedUser)
+    return render(request, 'profile/followers_list.html', {'user':user})
+
+@ajax_required
+@require_POST
+@login_required
+def user_follow(request):
+    user_id = request.POST.get('id')
+    action = request.POST.get('action')
+    if user_id and action:
+        try:
+            user = User.objects.get(id=user_id)
+            if action == 'follow':
+                Contact.objects.get_or_create(user_from=request.user,user_to=user)
+            else:
+                Contact.objects.filter(user_from=request.user,user_to=user).delete()
+            return JsonResponse({'status':'ok'})
+        except User.DoesNotExist:
+            return JsonResponse({'status':'error'})
+    return JsonResponse({'status':'error'})
+
+>>>>>>> 1e4939b2238e06d97eac506d47794fa9b5f26489

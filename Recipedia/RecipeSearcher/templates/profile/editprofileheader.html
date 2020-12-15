@@ -18,26 +18,31 @@
                             <!-- BEGIN profile-header-img -->
                             <div class="profile-header-img">
                                 {% if request.user.profile.photo%}
-                                <img src= {{request.user.profile.photo.url}}  alt="">
+                                <img src={{request.user.profile.photo.url}} alt="">
                                 {% else %}
-                                <img src="{% static 'img/blog/default_profile.jpg' %}"  alt="">
+                                <img src="{% static 'img/blog/default_profile.jpg' %}" alt="">
                                 {% endif %}
                             </div>
                             <!-- END profile-header-img -->
+                            {% with total_followers=request.user.followers.count %}
+                            <span class="count">
+                                <span class="total">{{ total_followers }}</span>
+                                follower{{ total_followers|pluralize }}
+                            </span>
+                            {% endwith %}
                             <!-- BEGIN profile-header-info -->
                             <div class="profile-header-info">
                                 <h4 class="m-t-10 m-b-5">{{request.user.first_name}}</h4>
                                 <h4 class="m-t-10 m-b-5">{{request.user.username}}</h4>
                                 <p class="m-b-10">{{request.user.profile.bio}}</p>
-                                <a href="/RecipeSearcher/{{request.user.first_name}}/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
                             </div>
                             <!-- END profile-header-info -->
                         </div>
                         <!-- END profile-header-content -->
                         <!-- BEGIN profile-header-tab -->
                         <ul class="profile-header-tab nav nav-tabs">
-                            <li class="nav-item"><a href="#profile-post" class="nav-link active show" data-toggle="tab">POSTS</a></li>
-                            <li class="nav-item"><a href="#profile-friends" class="nav-link" data-toggle="tab">FRIENDS</a></li>
+                            <li class="nav-item"><a href="/RecipeSearcher/{{request.user.username}}/" class="nav-link active show">POSTS</a></li>
+                            <li class="nav-item"><a href="/RecipeSearcher/{{request.user.username}}/followers" class="nav-link">FRIENDS</a></li>
                         </ul>
                         <!-- END profile-header-tab -->
                     </div>

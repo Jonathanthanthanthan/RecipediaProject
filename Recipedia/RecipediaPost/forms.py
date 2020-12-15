@@ -1,7 +1,7 @@
 #Form: Allows you to build standard forms
 from django import forms
 from django.utils import timezone
-from .models import Post
+from .models import Post, Comment
 from django.utils.text import slugify
 
 class EmailPostForm(forms.Form):
@@ -15,6 +15,11 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields= ('title','photo','body','status')
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+            model = Comment
+            fields = ('body',)
 
         
         

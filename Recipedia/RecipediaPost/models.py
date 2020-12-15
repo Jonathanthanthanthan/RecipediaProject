@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 
 def add_slug(instance, filename):
-        return f'posts/%Y/%m/%d/{instance.slug}/{filename}'
+        return 'post/{}/{}/{}'.format(instance.author.username,instance.slug, filename)
 
 #add the custom manager
 class PublishedManager(models.Manager):
@@ -30,7 +30,7 @@ class Post(models.Model):
                                related_name='blog_posts')
     author_name = models.CharField(max_length = 250, null=True)
     slug = models.SlugField(max_length=250,
-                                unique_for_date='publish',)
+                                unique_for_date='publish')
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -39,11 +39,12 @@ class Post(models.Model):
     status = models.CharField(max_length = 128,
                               choices=STATUS_CHOICES,
                               default='draft')
+
     photo = models.ImageField(upload_to=add_slug, blank=True)
 
     def get_absolute_url(self):
         return reverse('blog:post_detail',
-               args=[self.publish.year,
+                     args=[self.publish.year,
                      self.publish.month,
                      self.publish.day,
                      self.author,
@@ -53,6 +54,7 @@ class Post(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
 
     objects = models.Manager() # The default manager.
     published = PublishedManager() # Our custom manager.
@@ -67,7 +69,10 @@ class Comment(models.Model):
     post = models.ForeignKey(Post,
                          on_delete=models.CASCADE,
                          related_name='comments')
-    name = models.CharField(max_length=80)
+    user = models.ForeignKey(User,
+                          on_delete=models.CASCADE,
+                          related_name='comments',
+                          null=True)
     email = models.EmailField()
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -78,8 +83,4 @@ class Comment(models.Model):
     def __str__(self):
         return f'Comment by {self.name} on {self.post}'
 
-
-    
-    def __str__(self):
-        return self.title
 

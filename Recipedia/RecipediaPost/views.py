@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post
-from .forms import EmailPostForm, CreatePostForm
+from .models import Post, Comment
+from .forms import EmailPostForm, CreatePostForm, CommentForm
 from django.shortcuts import render, redirect
 
 def post_list(request):
@@ -8,7 +8,7 @@ def post_list(request):
     return render(request,
                   'postlist.html',
                   {'posts': posts})
-#Handling forms in views
+
 def post_share(request, post_id):
     # Retrieve post by id
     post = get_object_or_404(Post, id=post_id, status='published')
@@ -45,8 +45,22 @@ def post_detail(request, year, month, day, user, post):
                                     publish__year=year,
                                     publish__month=month,
                                     publish__day=day)
-    return render(request,
-                  'postdetail.html',
-                  {'post': post})
+    #List of active comments on the post
+    comments = post.comments.filter(active=True)
+
+    #new comment that will be created from forms
+    new_comment = None
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.email = request.user.email
+            new_comment.user = request.user
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(request,'postdetail.html', {'post': post, 'comments':comments, 'comment_form':comment_form})
     
 
