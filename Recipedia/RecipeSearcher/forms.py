@@ -29,5 +29,5 @@ class ProfileEditForm(forms.ModelForm):
         fields = ('date_of_birth','bio', 'photo')
 
 class SearchForm(forms.Form):
-    query = forms.CharField()
+    keyword = forms.CharField()
 # Create your models here.
