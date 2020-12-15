@@ -90,6 +90,10 @@ def followers_list (request, searchedUser):
     user = get_object_or_404(User,username=searchedUser)
     return render(request, 'profile/followers_list.html', {'user':user})
 
+def following_list (request, searchedUser):
+    user = get_object_or_404(User,username=searchedUser)
+    return render(request, 'profile/following_list.html', {'user':user})
+
 @ajax_required
 @require_POST
 @login_required

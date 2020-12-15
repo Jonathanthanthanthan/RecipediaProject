@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}" type="text/css">
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div id="content" class="content content-full-width">
+                <!-- begin profile -->
+                <div class="profile">
+                    <div class="profile-header">
+                        <!-- BEGIN profile-header-cover -->
+                        <div class="profile-header-cover"></div>
+                        <!-- END profile-header-cover -->
+                        <!-- BEGIN profile-header-content -->
+                        <div class="profile-header-content">
+                            <!-- BEGIN profile-header-img -->
+                            <div class="profile-header-img">
+                                {% if user.profile.photo%}
+                                <img src={{user.profile.photo.url}} alt="">
+                                {% else %}
+                                <img src="{% static 'img/blog/default_profile.jpg' %}" alt="">
+                                {% endif %}
+                            </div>
+                            <!-- END profile-header-img -->
+                            <!-- BEGIN profile-header-info -->
+                            <div class="profile-header-info">
+                                <h4 class="m-t-10 m-b-5">{{user.first_name}}</h4>
+                                <h3 class="m-t-10 m-b-5">{{user.username}}</h3>
+                                <p class="m-b-10">{{user.profile.bio}}</p>
+                                {% if request.user.username == user.username %}
+                                <a href="/RecipeSearcher/edit" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                                {% else  %}
+                                {% with total_followers=user.followers.count %}
+                                <span class="count">
+                                    <span class="total">{{ total_followers }}</span>
+                                    follower{{ total_followers|pluralize }}
+                                </span>
+                                <a href="#" data-id="{{ user.id }}" data-action="{% if request.user in user.followers.all %}un{% endif %}follow" class="follow button">
+                                    {% if request.user not in user.followers.all %}
+                                    Follow
+                                    {% else %}
+                                    Unfollow
+                                    {% endif %}
+                                </a>
+                                {% endwith %}
+                                {% endif %}
+                            </div>
+                            <!-- END profile-header-info -->
+                        </div>
+                        <!-- END profile-header-content -->
+                        <!-- BEGIN profile-header-tab -->
+                        <ul class="profile-header-tab nav nav-tabs">
+                            <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}" class="nav-link">POSTS</a></li>
+                            <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}/followers" class="nav-link">Followers</a></li>
+                            <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}/following" class="nav-link">Following</a></li>
+                        </ul>
+                        <!-- END profile-header-tab -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{%for f in user.following.all%}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="people-nearby">
+
+                <div class="nearby-user">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2">
+                            <img src={{f.profile.photo.url}} alt="user" class="profile-photo-lg">
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                            <h5><a href="/RecipeSearcher/{{f.username}}" class="profile-link">{{f.username}}</a></h5>
+                            <p>{{f.profile.bio}}</p>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

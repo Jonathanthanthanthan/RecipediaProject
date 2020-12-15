@@ -55,7 +55,8 @@
                         <!-- BEGIN profile-header-tab -->
                         <ul class="profile-header-tab nav nav-tabs">
                             <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}" class="nav-link">POSTS</a></li>
-                            <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}/followers" class="nav-link">FRIENDS</a></li>
+                            <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}/followers" class="nav-link">Followers</a></li>
+                            <li class="nav-item"><a href="/RecipeSearcher/{{user.username}}/following" class="nav-link">Following</a></li>
                         </ul>
                         <!-- END profile-header-tab -->
                     </div>
@@ -71,23 +72,23 @@
     <div class="row">
         <div class="col-md-8">
             <div class="people-nearby">
-              
-              <div class="nearby-user">
-                <div class="row">
-                  <div class="col-md-2 col-sm-2">
-                    <img src={{f.profile.photo.url}} alt="user" class="profile-photo-lg">
-                  </div>
-                  <div class="col-md-7 col-sm-7">
-                    <h5><a href="/RecipeSearcher/{{f.username}}" class="profile-link">{{f.username}}</a></h5>
-                    <p>{{f.profile.bio}}</p>
-                  </div>
-                  <div class="col-md-3 col-sm-3">
-                  </div>
+
+                <div class="nearby-user">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2">
+                            <img src={{f.profile.photo.url}} alt="user" class="profile-photo-lg">
+                        </div>
+                        <div class="col-md-7 col-sm-7">
+                            <h5><a href="/RecipeSearcher/{{f.username}}" class="profile-link">{{f.username}}</a></h5>
+                            <p>{{f.profile.bio}}</p>
+                        </div>
+                        <div class="col-md-3 col-sm-3">
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-    	</div>
-	</div>
+        </div>
+    </div>
 </div>
 {% endfor %}
 
