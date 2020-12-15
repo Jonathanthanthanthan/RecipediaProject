@@ -3,14 +3,30 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
-from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm
+from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm, SearchForm
 from .models import Profile
 from datetime import date
 from RecipediaPost.models import Post
 
 def home(request):
-    return render(request, 'index.html' )
+
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+    form = SearchForm(request.GET)
+    if form.is_valid():
+    query = form.cleaned_data['query']
+    results = Post.published.annotate(
+    search=SearchVector('title', 'body'),
+    ).filter(search=query)
+    return render(request,
+    'index.html',
+    {'form': form,
+    'query': query,
+    'results': results})
 
 def userlogin(request):
     if request.method == 'POST':
@@ -21,7 +37,7 @@ def userlogin(request):
             if user is not None:
                 if user.is_active:
                     login(request,user)
-                    
+
                     return render (request,'index.html')
                 else:
                     return HttpResponse('Disabled account')
@@ -78,6 +94,6 @@ def edit(request):
             user_form.save()
             profile_form.save()
     else:
-        user_form = UserEditForm(instance = request.user) 
+        user_form = UserEditForm(instance = request.user)
         profile_form = ProfileEditForm(instance = request.user.profile)
     return render(request, 'profile/edit.html', {'user_form':user_form, 'profile_form': profile_form})
