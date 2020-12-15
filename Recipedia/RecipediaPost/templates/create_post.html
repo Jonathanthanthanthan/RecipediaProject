@@ -7,7 +7,34 @@
     <div class="row justify-content-md-center">
         <div class="col-md-auto">
             <form method="post" enctype="multipart/form-data">
+    <table width="100%" border="0" cellspacing="0" cellpadding="6">
+        <colgroup>
+            <col width="140">
+            <col>
+        </colgroup>
+        <tbody>
 
+        <tr>
+            <th>title</th>
+            <td>
+                <label>
+                    <input required id="topic_title" maxlength="80" name="t_title" size="60" type="text">
+                </label>
+            </td>
+        </tr>
+
+        <tr>
+            <th valign="top">body</th>
+            <td>
+                <div class="body_count">
+                    <textarea style="width: 700px;" cols="62" rows="20" name="t_content"></textarea>
+                </div>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+</form>
                 {{form.photo}}
                 {{form.title}}
                 {{form.body}}
