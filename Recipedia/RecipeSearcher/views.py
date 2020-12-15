@@ -60,6 +60,7 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request,'register.html',{'user_form': user_form})
 
+@login_required
 def profile(request, searchedUser):
     user = get_object_or_404(User,username=searchedUser)
     posts = Post.published.get_queryset(user)
@@ -84,6 +85,7 @@ def edit(request):
         profile_form = ProfileEditForm(instance = request.user.profile)
     return render(request, 'profile/edit.html', {'user_form':user_form, 'profile_form': profile_form})
 
+@login_required
 def followers_list (request, searchedUser):
     user = get_object_or_404(User,username=searchedUser)
     return render(request, 'profile/followers_list.html', {'user':user})

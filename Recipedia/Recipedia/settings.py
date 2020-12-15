@@ -132,6 +132,7 @@ STATIC_URL = '/static/'
 STATICFILE_DIR=[os.path.join(BASE_DIR,'static')]
 
 LOGOUT_URL = 'logout'
+LOGIN_URL ='/RecipeSearcher/login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

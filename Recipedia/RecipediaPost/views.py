@@ -2,13 +2,17 @@ from django.shortcuts import render, get_object_or_404
 from .models import Post, Comment
 from .forms import EmailPostForm, CreatePostForm, CommentForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def post_list(request):
     posts = Post.published.get_queryset(request.user)
     return render(request,
                   'postlist.html',
                   {'posts': posts})
 
+@login_required
 def post_share(request, post_id):
     # Retrieve post by id
     post = get_object_or_404(Post, id=post_id, status='published')
@@ -24,6 +28,7 @@ def post_share(request, post_id):
     return render(request, 'blog/post/share.html', {'post': post,
                                                     'form': form})
 
+@login_required
 def create_post(request):
     if request.method== 'POST':
         form=CreatePostForm(request.POST,files=request.FILES)
@@ -38,6 +43,7 @@ def create_post(request):
         form=CreatePostForm()
     return render(request,'create_post.html', {'form': form})
 
+@login_required
 def post_detail(request, year, month, day, user, post):
     post = get_object_or_404(Post,  author_name=user,
                                     slug=post,
@@ -62,5 +68,11 @@ def post_detail(request, year, month, day, user, post):
         comment_form = CommentForm()
 
     return render(request,'postdetail.html', {'post': post, 'comments':comments, 'comment_form':comment_form})
-    
+   
+@login_required
+def post_feed(request):
+    user=request.user
+    following=[following_user for following_user in user.following.all()]
+    posts = Post.objects.filter(author__in = following).order_by('-pk')
 
+    return render (request,'feed.html',{'posts':posts})
