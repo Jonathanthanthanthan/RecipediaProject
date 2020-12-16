@@ -6,29 +6,53 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
 from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm, SearchForm
-from .models import Profile, Contact
+from .models import Profile
 from datetime import date
 from RecipediaPost.models import Post
 from django.views.decorators.http import require_POST
 from common.decorators import ajax_required
-
+import http.client
+import json
 
 def home(request):
+    text = {}
+    context = {}
+    # form = SearchForm()
+    # keyword = ""
+    # results = [] #work with project.py
+    # if 'keyword' in request.GET:
+    #     form = SearchForm(request.GET)
+    #     print("got here")
+    #     if form.is_valid():
+    #         keyword = form.cleaned_data['query']
+    #         print("keyword: ", keyword)
 
-    form = SearchForm()
-    query = None
-    results = []
-    if 'query' in request.GET:
-        form = SearchForm(request.GET)
-    if form.is_valid():
-        query = form.cleaned_data['query']
-    results = Post.published.annotate(
-    search=SearchVector('title', 'body'),).filter(search=query)
-    return render(request,
-    'index.html',
-    {'form': form,
-        'query': query,
-        'results': results})
+    if request.method == "POST":
+        keyword = request.POST.get('keyword')
+        print(keyword)
+        conn = http.client.HTTPSConnection("rapidapi.p.rapidapi.com")
+        headers = {
+            'x-rapidapi-host': "edamam-recipe-search.p.rapidapi.com",
+            'x-rapidapi-key': "03e7e0d99cmshf91be55a6500328p140583jsn8da2cf74d30b"
+            }
+        conn.request("GET", "/search?q="+keyword, headers=headers)
+        res = conn.getresponse()
+        raw_data = res.read()
+        encoding = res.info().get_content_charset('utf8')  # JSON default
+        data = json.loads(raw_data.decode(encoding))
+
+        # create a formatted string of the Python JSON object
+        text = json.dumps(data, sort_keys=True, indent=4)#all data retrieved from API, as a dictionary
+        output = json.loads(text)#convert str to dist
+        listOfRecipes = output['hits']
+        listOfURL = []
+        for item in listOfRecipes:
+            listOfURL.append(item["recipe"]["url"])
+            print("list of urls",listOfURL)
+
+        #context to send to html
+        context = {'urls':listOfURL}
+    return render(request,'index.html', context)
 
 def userlogin(request):
     if request.method == 'POST':
@@ -75,7 +99,6 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request,'register.html',{'user_form': user_form})
 
-@login_required
 def profile(request, searchedUser):
     user = get_object_or_404(User,username=searchedUser)
     posts = Post.published.get_queryset(user)
@@ -101,7 +124,6 @@ def edit(request):
     return render(request, 'profile/edit.html', {'user_form':user_form, 'profile_form': profile_form})
 
 
-@login_required
 def followers_list (request, searchedUser):
     user = get_object_or_404(User,username=searchedUser)
     return render(request, 'profile/followers_list.html', {'user':user})
@@ -127,5 +149,3 @@ def user_follow(request):
         except User.DoesNotExist:
             return JsonResponse({'status':'error'})
     return JsonResponse({'status':'error'})
-
-
