@@ -15,7 +15,8 @@ import http.client
 import json
 
 def home(request):
-    text = ""
+    text = {}
+    context = {}
     # form = SearchForm()
     # keyword = ""
     # results = [] #work with project.py
@@ -39,10 +40,19 @@ def home(request):
         raw_data = res.read()
         encoding = res.info().get_content_charset('utf8')  # JSON default
         data = json.loads(raw_data.decode(encoding))
+
         # create a formatted string of the Python JSON object
-        text = json.dumps(data, sort_keys=True, indent=4)
-        print(text)
-    return render(request,'index.html')
+        text = json.dumps(data, sort_keys=True, indent=4)#all data retrieved from API, as a dictionary
+        output = json.loads(text)#convert str to dist
+        listOfRecipes = output['hits']
+        listOfURL = []
+        for item in listOfRecipes:
+            listOfURL.append(item["recipe"]["url"])
+            print("list of urls",listOfURL)
+
+        #context to send to html
+        context = {'urls':listOfURL}
+    return render(request,'index.html', context)
 
 def userlogin(request):
     if request.method == 'POST':
