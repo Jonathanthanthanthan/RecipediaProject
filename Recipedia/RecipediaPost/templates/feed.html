@@ -15,18 +15,19 @@
             {%endif%}
         </div>
         <div class="col-md-8">
-          <div class="card-body">
-            <a class=" card-title text-dark " href={{post.get_absolute_url }}><p class='text-uppercase font-weight-bold'>{{post.title}}</p> </a>
-            <p class="card-text">{{ post.body|truncatewords:10|linebreaks }}</p>
-            <a href = {{post.author.get_absolute_url}} class="card-text text-muted"><small >{{post.author.username}}</small></a>
-            <p class="card-text"><small class="text-muted">{{post.publish}}</small></p>
-          </div>
+            <div class="card-body">
+                <div class="row">  <a class=" card-title text-dark " href={{post.get_absolute_url }}><p class='text-uppercase font-weight-bold'>{{post.title}}</p> </a></div>
+                <div class="row"><p class="card-text">{{ post.body|truncatewords:10|linebreaks }}</p></div>
+                <div class="row">
+                    <div class="col"> <a href={{post.author.get_absolute_url}} class="card-text text-muted"><small>By: {{post.author.username}}</small></a></div>
+                    <div class="col-auto"><a class="card-text text-muted"><small>{{post.users_like.count}} Likes</small></a></div>
+                </div>
+                <div class="row"><a class="card-text text-muted"><small>Posted on {{post.publish}}</small></a></div>
+            </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-
 {%endfor%}
 {% endblock %}

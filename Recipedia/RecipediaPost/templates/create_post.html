@@ -1,52 +1,43 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% load static %}
 {% block content %}
 
 <div class="container">
-    <div class="row justify-content-md-center">
         <div class="col-md-auto">
             <form method="post" enctype="multipart/form-data">
-    <table width="100%" border="0" cellspacing="0" cellpadding="6">
-        <colgroup>
-            <col width="140">
-            <col>
-        </colgroup>
-        <tbody>
+                <div class="form-group">
+                    <label >Title of post</label>
+                    {{form.title}}
 
-        <tr>
-            <th>title</th>
-            <td>
-                <label>
-                    <input required id="topic_title" maxlength="80" name="t_title" size="60" type="text">
-                </label>
-            </td>
-        </tr>
-
-        <tr>
-            <th valign="top">body</th>
-            <td>
-                <div class="body_count">
-                    <textarea style="width: 700px;" cols="62" rows="20" name="t_content"></textarea>
                 </div>
-            </td>
-        </tr>
 
-        </tbody>
-    </table>
-</form>
-                {{form.photo}}
-                {{form.title}}
-                {{form.body}}
-                {{form.status}}
-                {% csrf_token %}
                 <div class="row justify-content-md-center">
-                    <p><input type="submit" class="site-btn" value="Save changes"></p>
+                    <div class="col">
+                        <label >Select photo for post</label>
+                    </div>
+                    <div class="col">
+                        {{form.photo}}
+                    </div>
                 </div>
+
+                <div class="row justify-content-md-center">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Body of your post</label>
+                        {{form.body}}
+                    </div>
+                </div>
+                {{form.status}}
+                <div class="row justify-content-md-center">
+                    <div class="row justify-content-md-center">
+                        <p><input type="submit" class="site-btn" value="Save changes"></p>
+                    </div>
+                </div>
+                {% csrf_token %}
             </form>
             <!-- end profile-content -->
         </div>
-    </div>
 </div>
 
 {% endblock %}

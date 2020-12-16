@@ -78,12 +78,15 @@
                     <div class="col-lg-6 ">
                         <div class="blog__item">
                             <div>
+                                {%if post.photo%}
                                 <img src={{post.photo.url}} width="120" height="120" alt="">
+                                {%endif%}
                             </div>
                             <div class="blog__item__text">
                                 <ul>
                                     <li><i class="fa fa-calendar-o"></i> {{post.publish}}</li>
                                 </ul>
+                                <p class="text-muted"> {{post.users_like.count}} likes </p>
                                 <h5><a href="#">{{post.title}}</a></h5>
                                 <p>
                                     {{post.body}}

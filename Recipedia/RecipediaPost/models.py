@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
+from django.conf import settings
 
 def add_slug(instance, filename):
         return 'post/{}/{}/{}'.format(instance.author.username,instance.slug, filename)
@@ -41,6 +42,8 @@ class Post(models.Model):
                               default='draft')
 
     photo = models.ImageField(upload_to=add_slug, blank=True)
+    users_like = models.ManyToManyField(User, related_name='posts_liked', blank=True)
+    total_likes=models.PositiveIntegerField(db_index=True, default=0)
 
     def get_absolute_url(self):
         return reverse('blog:post_detail',

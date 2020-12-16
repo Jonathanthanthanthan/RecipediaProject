@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
 from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm, SearchForm
-from .models import Profile
+from .models import Profile, Contact
 from datetime import date
 from RecipediaPost.models import Post
 from django.views.decorators.http import require_POST
@@ -19,17 +19,16 @@ def home(request):
     query = None
     results = []
     if 'query' in request.GET:
-    form = SearchForm(request.GET)
+        form = SearchForm(request.GET)
     if form.is_valid():
-    query = form.cleaned_data['query']
+        query = form.cleaned_data['query']
     results = Post.published.annotate(
-    search=SearchVector('title', 'body'),
-    ).filter(search=query)
+    search=SearchVector('title', 'body'),).filter(search=query)
     return render(request,
     'index.html',
     {'form': form,
-    'query': query,
-    'results': results})
+        'query': query,
+        'results': results})
 
 def userlogin(request):
     if request.method == 'POST':
@@ -100,8 +99,7 @@ def edit(request):
         user_form = UserEditForm(instance = request.user)
         profile_form = ProfileEditForm(instance = request.user.profile)
     return render(request, 'profile/edit.html', {'user_form':user_form, 'profile_form': profile_form})
-<<<<<<< HEAD
-=======
+
 
 @login_required
 def followers_list (request, searchedUser):
@@ -130,4 +128,4 @@ def user_follow(request):
             return JsonResponse({'status':'error'})
     return JsonResponse({'status':'error'})
 
->>>>>>> 1e4939b2238e06d97eac506d47794fa9b5f26489
+

@@ -15,6 +15,10 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields= ('title','photo','body','status')
+        widgets={
+            'body':forms.Textarea(attrs={'class':'form-control', 'id':'exampleFormControlTextarea1'}),
+            'title':forms.TextInput(attrs={'class':'form-control'}),
+            }
 
 class CommentForm(forms.ModelForm):
     class Meta:
