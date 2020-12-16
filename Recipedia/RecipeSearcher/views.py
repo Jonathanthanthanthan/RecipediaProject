@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
 from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm, SearchForm
-from .models import Profile
+from .models import Profile, Contact
 from datetime import date
 from RecipediaPost.models import Post
 from django.views.decorators.http import require_POST
