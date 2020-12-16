@@ -17,11 +17,13 @@ import json
 def home(request):
 
     if request.method == "POST":
+
         context = None
         text = {}
         listOfURL = []
         keyword = request.POST.get('keyword')
         print(keyword)
+        #using Edamam API for searching
         conn = http.client.HTTPSConnection("rapidapi.p.rapidapi.com")
         headers = {
             'x-rapidapi-host': "edamam-recipe-search.p.rapidapi.com",
@@ -32,7 +34,7 @@ def home(request):
         raw_data = res.read()
         encoding = res.info().get_content_charset('utf8')  # JSON default
         data = json.loads(raw_data.decode(encoding))
-
+        ###
         # create a formatted string of the Python JSON object
         text = json.dumps(data, sort_keys=True, indent=4)#all data retrieved from API, as a dictionary
         output = json.loads(text)#convert str to dist
@@ -42,10 +44,11 @@ def home(request):
             print("url: ", url)
             listOfURL.append(url)
 
-        context = {'urls':listOfURL}
-    #context to send to html
+        context = {'urls':listOfURL}#context to send to html
+        return render(request,'results.html', context)
 
-    return render(request,'index.html', context)
+
+    return render(request,'index.html')
 def userlogin(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)

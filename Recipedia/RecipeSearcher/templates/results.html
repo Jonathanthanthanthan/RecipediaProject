@@ -1,11 +1,21 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 <!-- Result Section Begin -->
 <section class="results">
     <div class="container">
-        
+      <div class="row">
+          <div class="col-lg-12">
+            <div class="results">
+              {% for url in urls %}
+
+                  <li><a href="{{ url }}">{{ url }}</a></li>
+
+              {% endfor %}
+            </div>
+          </div>
+      </div>
     </div>
 </section>
 <!-- Result Section End -->
