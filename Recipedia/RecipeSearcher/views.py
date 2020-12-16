@@ -19,6 +19,7 @@ def home(request):
     if request.method == "POST":
 
         context = {}
+        ctx = []
         text = {}
         listOfURL = []
 
@@ -49,8 +50,10 @@ def home(request):
             listOfURL.append(url)
             image = item["recipe"]["image"]
             label = item["recipe"]["label"]
-            context = {'urls':listOfURL, 'image': image, 'dish_name': label}#context to send to html
+            contextEach = {'url':url, 'image': image, 'dish_name': label}#context to send to html
 
+            ctx.append(contextEach)
+        context["cont"] = ctx
         return render(request,'results.html', context)
 
 
