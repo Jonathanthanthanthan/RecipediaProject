@@ -18,9 +18,10 @@ def home(request):
 
     if request.method == "POST":
 
-        context = None
+        context = {}
         text = {}
         listOfURL = []
+
         keyword = request.POST.get('keyword')
         print(keyword)
         #using Edamam API for searching
@@ -40,11 +41,16 @@ def home(request):
         output = json.loads(text)#convert str to dist
         listOfRecipes = output['hits']
         for item in listOfRecipes:
+            contextEach = None
+            image = ""
+            label = ""
             url = item["recipe"]["url"]
-            print("url: ", url)
+            print(json.dumps(item["recipe"], sort_keys=True, indent=4))
             listOfURL.append(url)
+            image = item["recipe"]["image"]
+            label = item["recipe"]["label"]
+            context = {'urls':listOfURL, 'image': image, 'dish_name': label}#context to send to html
 
-        context = {'urls':listOfURL}#context to send to html
         return render(request,'results.html', context)
 
 
