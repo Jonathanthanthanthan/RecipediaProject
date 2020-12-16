@@ -15,19 +15,11 @@ import http.client
 import json
 
 def home(request):
-    text = {}
-    context = {}
-    # form = SearchForm()
-    # keyword = ""
-    # results = [] #work with project.py
-    # if 'keyword' in request.GET:
-    #     form = SearchForm(request.GET)
-    #     print("got here")
-    #     if form.is_valid():
-    #         keyword = form.cleaned_data['query']
-    #         print("keyword: ", keyword)
 
     if request.method == "POST":
+        context = None
+        text = {}
+        listOfURL = []
         keyword = request.POST.get('keyword')
         print(keyword)
         conn = http.client.HTTPSConnection("rapidapi.p.rapidapi.com")
@@ -45,15 +37,15 @@ def home(request):
         text = json.dumps(data, sort_keys=True, indent=4)#all data retrieved from API, as a dictionary
         output = json.loads(text)#convert str to dist
         listOfRecipes = output['hits']
-        listOfURL = []
         for item in listOfRecipes:
-            listOfURL.append(item["recipe"]["url"])
-            print("list of urls",listOfURL)
+            url = item["recipe"]["url"]
+            print("url: ", url)
+            listOfURL.append(url)
 
-        #context to send to html
         context = {'urls':listOfURL}
-    return render(request,'index.html', context)
+    #context to send to html
 
+    return render(request,'index.html', context)
 def userlogin(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
