@@ -1,0 +1,43 @@
+{%extends 'base.html'%}
+{% load static %}
+{%block content%}
+
+<form action="" method="Post">
+    <div class="container-fluid">
+        <div class="container text-center" id="searchBox">
+            <h1>User search </h1>
+            <h6>Enter users username to find their profile </h6>
+            <div class="row">
+
+                <div class="col">
+                    <div class='input-group'>
+                        {% csrf_token %}
+                        {{profileSearchForm.user}}
+                    </div>
+                </div>
+
+                <div class="col-">
+
+                    <div class="col-">
+                        <button class="btn" type="submit" name="button">Search</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<style>
+    div.nice-select {
+        display: none
+    }
+</style>
+
+{%endblock%}
+
+{% block domready %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ profileSearchForm.media }}
+{% endblock %}
