@@ -89,8 +89,12 @@ WSGI_APPLICATION = 'Recipedia.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'deld8q8ei6chgd',
+        'HOST':'ec2-18-205-122-145.compute-1.amazonaws.com',
+        'PORT':5432,
+        'USER':'ehocopmqsjpoyh',
+        'PASSWORD':'fbc9d94de46a3da14eec2f579ff9cc667f45236ba65371a72e44811a7499a364',
     }
 }
 
