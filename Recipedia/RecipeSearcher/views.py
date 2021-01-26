@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
 from django.core.mail import send_mail
-from .forms import LoginForm, UserRegistrationForm, ProfileEditForm, UserEditForm, SearchForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.html import format_html
+from .forms import *
 from .models import Profile, Contact
 from datetime import date
 from RecipediaPost.models import Post
@@ -13,51 +15,89 @@ from django.views.decorators.http import require_POST
 from common.decorators import ajax_required
 import http.client
 import json
+from dal import autocomplete
+import unicodedata
 
-def home(request):
+def remove_control_characters(s):
+    return "".join(ch for ch in s if unicodedata.category(ch)[0]!="C")
 
+def results(request):
     if request.method == "POST":
-
-        context = {}
-        ctx = []
-        text = {}
-        listOfURL = []
-
-        keyword = request.POST.get('keyword')
-        print(keyword)
-        #using Edamam API for searching
+        search_form=SearchForm(data=request.POST)
+        if search_form.is_valid():
+            cd=search_form.cleaned_data
+            request.session['DietLabel']=cd['DietLabels']
+            request.session['HealthLabel']=cd['HealthLabels']
+            request.session['keyword']=cd['keyword']
+            request.session['cals']=cd['calories']
+            request.session['maxIngredients']=cd['maxNumberOfIngredients']
+            response=redirect('RecipeSearcher:results')
+            return response
+    else:
+        search_form=SearchForm()
         conn = http.client.HTTPSConnection("rapidapi.p.rapidapi.com")
+        searchString='/search?q='
         headers = {
             'x-rapidapi-host': "edamam-recipe-search.p.rapidapi.com",
             'x-rapidapi-key': "03e7e0d99cmshf91be55a6500328p140583jsn8da2cf74d30b"
             }
-        conn.request("GET", "/search?q="+keyword, headers=headers)
+        keyword=request.session.get('keyword')
+        keyword=keyword.replace(" ","")
+        keyword=keyword.strip()
+        keyword=remove_control_characters(keyword)
+        print(keyword)
+        searchString=searchString+keyword+'&from=0&to=100'
+        if request.session.get('cals') is not None:
+            cals=request.session.get('cals')
+            searchString=searchString+'&calories=0-'+str(cals)
+        if request.session.get('maxIngredients') is not None or 0:
+            maxIngredients=request.session['maxIngredients']
+            searchString=searchString+'&ingr='+str(maxIngredients)
+        if request.session.get('DietLabel') is not None:
+            DietLabel=request.session['DietLabel']
+            LabelIdentifier='diet'
+            searchString=searchString+labelParser(DietLabel,LabelIdentifier)
+        if request.session.get('HealthLabel') is not None:
+            HealthLabel=request.session['HealthLabel']
+            LabelIdentifier='health'
+            searchString=searchString+labelParser(HealthLabel,LabelIdentifier)
+        conn.request("GET", searchString, headers=headers)
+        print(searchString)
         res = conn.getresponse()
         raw_data = res.read()
-        encoding = res.info().get_content_charset('utf8')  # JSON default
-        data = json.loads(raw_data.decode(encoding))
-        ###
-        # create a formatted string of the Python JSON object
-        text = json.dumps(data, sort_keys=True, indent=4)#all data retrieved from API, as a dictionary
-        output = json.loads(text)#convert str to dist
-        listOfRecipes = output['hits']
-        for item in listOfRecipes:
-            contextEach = None
-            image = ""
-            label = ""
-            url = item["recipe"]["url"]
-            print(json.dumps(item["recipe"], sort_keys=True, indent=4))
-            listOfURL.append(url)
-            image = item["recipe"]["image"]
-            label = item["recipe"]["label"]
-            contextEach = {'url':url, 'image': image, 'dish_name': label}#context to send to html
+        json_data=json.loads(raw_data)
+        hits = json_data['hits']
+        hitCount=len(hits)
+        listOfRecipes=[]
+        for recipes in hits:
+            listOfRecipes.append(recipes['recipe'])
+            
+        paginator=Paginator(listOfRecipes, 30)
+        page = request.GET.get('page')
+        try:
+            recipes = paginator.page(page)
+        except PageNotAnInteger:
+            recipes =paginator.page(1)
+        except EmptyPage:
+            recipes =paginator.page(paginator.num_pages)
+        return render(request,'results.html', {'page':page, 'recipes':recipes, 'search_form':search_form, 'hitCount':hitCount, 'dietLabelData':StringLabelParser(request.session.get('DietLabel')),'healthLabelData':StringLabelParser(request.session.get('HealthLabel'))})
 
-            ctx.append(contextEach)
-        context["cont"] = ctx
-        return render(request,'results.html', context)
+def home(request):
+    if request.method == "POST":
+        search_form=SearchForm(data=request.POST)
+        if search_form.is_valid():
+            cd=search_form.cleaned_data
+            request.session['DietLabel']=cd['DietLabels']
+            request.session['HealthLabel']=cd['HealthLabels']
+            request.session['keyword']=cd['keyword']
+            request.session['cals']=cd['calories']
+            request.session['maxIngredients']=cd['maxNumberOfIngredients']
+            response=redirect('RecipeSearcher:results')
+            return response
+    else:
+        search_form=SearchForm()
+    return render(request,'index.html',{'search_form':search_form})
 
-
-    return render(request,'index.html')
 def userlogin(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -67,8 +107,7 @@ def userlogin(request):
             if user is not None:
                 if user.is_active:
                     login(request,user)
-
-                    return render (request,'index.html')
+                    return redirect('RecipeSearcher:home')
                 else:
                     return HttpResponse('Disabled account')
             else:
@@ -77,8 +116,6 @@ def userlogin(request):
         form = LoginForm()
     return render(request, 'userlogin.html', {'form': form})
 
-def results(request):
-    return render(request,'results.html')
 
 def base(request):
     return render(request,'base.html')
@@ -153,3 +190,28 @@ def user_follow(request):
         except User.DoesNotExist:
             return JsonResponse({'status':'error'})
     return JsonResponse({'status':'error'})
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    choice_template = 'userchoice.html'
+
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        qs = User.objects.all()
+        if self.q:
+            qs = qs.filter(username__istartswith=self.q)
+        return qs
+    def get_result_label(self, item):
+        return '@'+item.username
+
+@login_required
+def userSearch(request):
+    if request.method == 'GET':
+        profileSearchForm=ProfileSearchForm(data=request.GET)
+        if profileSearchForm.is_valid():
+            selectedUser=profileSearchForm.cleaned_data['user']
+            return redirect('RecipeSearcher:profile_page',searchedUser= selectedUser)
+        else:
+            print(profileSearchForm.errors)
+    else:
+        profileSearchForm=ProfileSearchForm()
+    return render(request,'usersearch.html', {'profileSearchForm':profileSearchForm})

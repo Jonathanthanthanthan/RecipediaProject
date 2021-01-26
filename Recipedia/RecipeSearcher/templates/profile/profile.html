@@ -62,48 +62,36 @@
             </div>
         </div>
     </div>
-</div>
-
-
-<!-- begin profile-content -->
-<div class="profile-content">
-    <!-- begin tab-content -->
-    <div class="tab-content p-0">
-        <!-- begin #profile-post tab -->
-        <div class="tab-pane fade active show" id="profile-post">
-            <!-- begin timeline -->
-            {% for post in posts %}
-            <div class="col-lg-8 col-md-7">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6 ">
-                        <div class="blog__item">
-                            <div>
-                                {%if post.photo%}
-                                <img src={{post.photo.url}} width="120" height="120" alt="">
-                                {%endif%}
+    {%for post in posts%}
+    <div class='container my-2'>
+        <div class=col align-self-start'>
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col my-1 mx-1">
+                        {%if post.photo%}
+                        <a href={{post.get_absolute_url }}> <img class='img-thumbnail ' style='height:175px; width:225px;' src={{post.photo.url}} alt="Photo unavailable"></a>
+                        {%endif%}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div class="row">  <a class=" card-title text-dark " href={{post.get_absolute_url }}><p class='text-uppercase font-weight-bold'>{{post.title}}</p> </a></div>
+                            <div class="row"><p class="card-text">{{ post.body|truncatewords:10|linebreaks }}</p></div>
+                            <div class="row">
+                                <div class="col"> <a href={{post.author.get_absolute_url}} class="card-text text-muted"><small>By: {{post.author.username}}</small></a></div>
+                                <div class="col-auto"><a class="card-text text-muted"><small>{{post.users_like.count}} Likes</small></a></div>
                             </div>
-                            <div class="blog__item__text">
-                                <ul>
-                                    <li><i class="fa fa-calendar-o"></i> {{post.publish}}</li>
-                                </ul>
-                                <p class="text-muted"> {{post.users_like.count}} likes </p>
-                                <h5><a href="#">{{post.title}}</a></h5>
-                                <p>
-                                    {{post.body}}
-                                </p>
-                                <a href={{post.get_absolute_url}} class="blog__btn">READ MORE <span class="arrow_right"></span></a>
-                            </div>
+                            <div class="row"><a class="card-text text-muted"><small>Posted on {{post.publish}}</small></a></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {% endfor %}
-        <!-- end #profile-post tab -->
     </div>
-    <!-- end tab-content -->
+    {%endfor%}
 </div>
-<!-- end profile-content -->
+
+
+
 {% endblock %}
 
 {% block domready %}

@@ -39,7 +39,7 @@ class Post(models.Model):
     body = models.TextField()
     status = models.CharField(max_length = 128,
                               choices=STATUS_CHOICES,
-                              default='draft')
+                              default='published')
 
     photo = models.ImageField(upload_to=add_slug, blank=True)
     users_like = models.ManyToManyField(User, related_name='posts_liked', blank=True)

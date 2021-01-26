@@ -66,6 +66,7 @@ def post_detail(request, year, month, day, user, post):
             new_comment.email = request.user.email
             new_comment.user = request.user
             new_comment.save()
+            return redirect(post.get_absolute_url())
     else:
         comment_form = CommentForm()
 

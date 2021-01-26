@@ -18,6 +18,7 @@
 
         <div class="checkout__form">
             <form method="post">
+                {% csrf_token %}
                 <div class="row justify-content-md-center">
                     <div class="col">
                         <div class="row justify-content-md-center">
@@ -42,7 +43,6 @@
                                         <span>*</span>
                                     </p>
                                     {{ form.password }}
-                                    {% csrf_token %}
                                 </div>
                             </div>
                         </div>

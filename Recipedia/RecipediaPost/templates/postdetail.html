@@ -1,70 +1,150 @@
 {% extends 'base.html' %}
-{%load static%}
+{% load static %}
 {% block content %}
+<!-- Blog Details Hero Begin -->
+<section class="blog-details-hero set-bg" data-setbg="{% static 'img/hero/post-detail-default.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="blog__details__hero__text">
+                    <h2>{{post.title}}</h2>
+                    {% with total_likes=post.users_like.count users_like=post.users_like.all %}
+                    <ul>
+                        <li>By {{post.author}}</li>
+                        <li>{{post.publish|date:'F d Y'}}</li>
+                        <li>{{post.comments.count}} comment{{post.comments.count|pluralize}}</li>
+                        <li>
+                            <div class="image-info">
+                                <div>
+                                    <span class="count">
+                                        <span class="total">{{ total_likes }}</span>
+                                        like{{ total_likes|pluralize }}
+                                    </span>
 
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <button class="btn btn-success btn-lg">
+                        <a data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like"
+                           class="like button text-light">
+                            {% if request.user not in users_like %}
+                            Like
+                            {% else %}
+                            Unlike
+                            {% endif %}
+                        </a>
+                    </button>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Hero End -->
+<!-- Blog Details Section Begin -->
+<section class="blog-details spad">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-7-fluid order-md-1 order-1 ">
+                <div class="blog__details__text">
+                    {% if post.photo%}
+                    <img class="rounded mx-auto d-block " src={{post.photo.url}} style="height:550px; width:600px" alt="">
+                    {% endif %}
+                    <p>
+                        {{ post.body|linebreaks }}
+                    </p>
+                </div>
+                <div class="blog__details__content">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="blog__details__author">
+                                <div class="blog__details__author__pic">
+                                    {% if post.author.profile.photo %}
+                                    <img class="rounded mx-auto d-block " src={{post.author.profile.photo.url}} alt="">
+                                    {% else %}
+                                    <img class="rounded mx-auto d-block " src="{% static 'img/blog/default_profile.jpg' %}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="blog__details__author__text">
+                                    <h6><a class="text-dark" href="{{post.author.get_absolute_url}}">{{post.author}}</a></h6>
+                                    <span>Author</span>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog Details Section End -->
 
-<h1>{{ post.title }}</h1>
-{% with total_likes=post.users_like.count users_like=post.users_like.all %}
-<div class="image-info">
-    <div>
-        <span class="count">
-            <span class="total">{{ total_likes }}</span>
-            like{{ total_likes|pluralize }}
-        </span>
-        <a href="" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like"
-           class="like button">
-            {% if request.user not in users_like %}
-            Like
-            {% else %}
-            Unlike
-            {% endif %}
-        </a>
+<div class="container justify">
+    <!-- Section to display the form to create a new comment -->
+    {% if new_comment %}
+    <div class="row justify-content-center">
+        <h2>Your comment has been added.</h2>
+    </div>
+    {% else %}
+    <form method="post">
+        <div class="row justify-content-center">
+            <div class="col">
+                {{ comment_form.body }}
+                {% csrf_token %}
+            </div>
+            <div class="col-auto">
+                <p><input class="btn btn-light" type="submit" value="Add comment"></p>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+    <!-- end section -->
+
+    <div class="row justify-content-left">
+        <div class="col">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-comment"></span>
+                <h3 class="panel-title">
+                    {{post.comments.count}} Comment{{post.comments.count|pluralize}}
+                </h3>
+            </div>
+            <div class="panel-body">
+                <ul class="list-group">
+                    {% for comment in comments %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <img src={{comment.user.profile.photo.url}} class="img-circle" alt="" />
+                            </div>
+                            <div class="col-md-11">
+                                <div class="row">
+                                    <div class="mic-info">
+                                        By: <a href="#">{{comment.user}}</a> on {{comment.created|date:'F d Y'}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="comment-text">
+                                        {{comment.body}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <p>There are no comments yet.</p>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>
     </div>
 </div>
-{% endwith %}
 
 
-<p class="date">
-    Published {{ post.publish }} by {{ post.author }}
-</p>
 
-{% if post.photo%}
-<img src={{post.photo.url}} alt="">
-{% endif %}
-{{ post.body|linebreaks }}
 
-<!-- Section to display total number of comments  -->
-{% with comments.count as total_comments %}
-<h2>
-    {{ total_comments }} comment{{ total_comments|pluralize }}
-</h2>
-{% endwith %}
-<!-- end section-->
-<!-- Section to display all comments under the post or none if post has no comments yet -->
-{% for comment in comments %}
-<div class="comment">
-    <p class="info">
-        Comment {{ forloop.counter }} by <a href={{comment.user.get_absolute_url}}>{{ comment.user.username }}</a>
-        {{ comment.created }}
-    </p>
-    {{ comment.body|linebreaks }}
-</div>
-{% empty %}
-<p>There are no comments yet.</p>
-{% endfor %}
-<!-- end section -->
-<!-- Section to display the form to create a new comment -->
-{% if new_comment %}
-<h2>Your comment has been added.</h2>
-{% else %}
-<h2>Add a new comment</h2>
-<form method="post">
-    {{ comment_form.as_p }}
-    {% csrf_token %}
-    <p><input type="submit" value="Add comment"></p>
-</form>
-{% endif %}
-<!-- end section -->
 {% endblock %}
 
 {% block domready  %}

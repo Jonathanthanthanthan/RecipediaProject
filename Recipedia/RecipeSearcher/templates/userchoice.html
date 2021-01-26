@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load thumbnail %}
+
+<span class="block person" data-value="{{ choice.pk }}">
+    <img src="{% thumbnail choice.profile.photo 50x50 crop %}" />
+
+    <a href="{{ choice.get_absolute_url }}">
+        {{ choice.usernam}}
+    </a>
+
+    <a href="{% url 'admin:persons_person_change' choice.pk %}">
+        {% trans 'Edit person' %}
+    </a>
+
+
+</span>
