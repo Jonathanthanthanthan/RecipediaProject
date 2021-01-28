@@ -9,7 +9,7 @@ Image handling
 pip install Pillow==7.0.0
 ```
 
-## Autocopmlete-light
+## Django-Autocopmlete-light
 Autocopmlete service that will autocomplete when searching for users to follow them. 
 
 ```
