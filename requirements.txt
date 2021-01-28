@@ -7,7 +7,6 @@ Automat==0.8.0
 bcrypt==3.1.7
 blinker==1.4
 cachetools==4.2.0
-certifi==2019.11.28
 command-not-found==0.3
 configobj==5.0.6
 constantly==15.1.0
