@@ -1,1 +1,1 @@
-web: gunicorn --chdir /mnt/c/Users/jonat/Desktop/Team07CMPE133/Recipedia Recipedia.wsgi 
+web: gunicorn Recipedia.wsgi 
