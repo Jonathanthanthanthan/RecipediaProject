@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'dal',
     'dal_select2',
     'RecipeSearcher.apps.RecipesearcherConfig',
-
     'django.contrib.admin',
     'RecipediaPost.apps.RecipediaPostCongig',
     'django.contrib.auth',
@@ -61,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddeware'
 ]
 
 ROOT_URLCONF = 'Recipedia.urls'
