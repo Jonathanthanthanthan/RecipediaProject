@@ -1,1 +1,1 @@
-web: gunicorn Recipedia.wsgi 
+web: gunicorn --chdir ./Recipedia Recipedia.wsgi 
