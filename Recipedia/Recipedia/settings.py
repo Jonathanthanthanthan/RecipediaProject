@@ -33,7 +33,7 @@ SECRET_KEY = '5ag^u%%9g-qr@3!9dj(-jhaoewrhid=tk16gh+d2i%iuoht!yt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://recipedia-ja.herokuapp.com/','127.0.0.1', 'localhost' ]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
