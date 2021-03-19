@@ -35,7 +35,7 @@ class SearchForm(forms.Form):
     Diet=[('balanced','Balanced'),('high-protein','High-Protein'),('low-fat','Low-Fat')]
     Health=[('alcohol-free','Alcohol-free'),('sugar-conscious','Sugar-conscious'),('peanut-free','Peanut-free'),('tree-nut-free','Tree Nuts'),('vegan','Vegan'),('vegetarian','Vegetarian')]
     keyword = forms.CharField(required=True,widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Enter list of ingredients seperated by commas'}))
-    calories = forms.IntegerField(widget=forms.NumberInput(attrs={'type':'range', 'step': '50', 'min': '0', 'max': '1200', 'class':'custom-range', 'id':'myRange', 'value':'1200'}), required=False, label='Max calories /Serving')
+    calories = forms.IntegerField(widget=forms.NumberInput(attrs={'type':'range', 'step': '50', 'min': '0', 'max': '3000', 'class':'custom-range', 'id':'myRange', 'value':'1200'}), required=False, label='Max calories /Serving')
     maxNumberOfIngredients=forms.IntegerField(widget=forms.NumberInput(attrs={'class':'form-control', 'id':'typeNumber','placeholder':'Number of ingredients'}),required=False)
     HealthLabels=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=Health, required=False,label='Health Labels')
     DietLabels=forms.MultipleChoiceField(choices=Diet,widget=forms.CheckboxSelectMultiple(), required=False,label='Diet Labels')
