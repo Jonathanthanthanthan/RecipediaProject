@@ -15,11 +15,7 @@ from django.views.decorators.http import require_POST
 from common.decorators import ajax_required
 import http.client
 import json
-from dal import autocomplete
-import unicodedata
-
-def remove_control_characters(s):
-    return "".join(ch for ch in s if unicodedata.category(ch)[0]!="C")
+from .project import *
 
 def results(request):
     if request.method == "POST":
@@ -34,17 +30,12 @@ def results(request):
             response=redirect('RecipeSearcher:results')
             return response
     else:
-        search_form=SearchForm()
-        conn = http.client.HTTPSConnection("rapidapi.p.rapidapi.com")
+        initialValues = {'keyword': request.session.get('keyword'), 'DietLabels':request.session.get('DietLabel'), 'HealthLabels':request.session.get('HealthLabel'), 
+                        'calories':request.session.get('cals'),'maxNumberOfIngredients':request.session.get('maxIngredients')}
+        search_form=SearchForm(initial = initialValues)
         searchString='/search?q='
-        headers = {
-            'x-rapidapi-host': "edamam-recipe-search.p.rapidapi.com",
-            'x-rapidapi-key': "03e7e0d99cmshf91be55a6500328p140583jsn8da2cf74d30b"
-            }
         keyword=request.session.get('keyword')
-        keyword=keyword.replace(" ","")
-        keyword=keyword.strip()
-        keyword=remove_control_characters(keyword)
+        keyword = sanitizeInput(keyword)
         print(keyword)
         searchString=searchString+keyword+'&from=0&to=100'
         if request.session.get('cals') is not None:
@@ -60,7 +51,9 @@ def results(request):
         if request.session.get('HealthLabel') is not None:
             HealthLabel=request.session['HealthLabel']
             LabelIdentifier='health'
-            searchString=searchString+labelParser(HealthLabel,LabelIdentifier)
+        searchString=searchString+labelParser(HealthLabel,LabelIdentifier)
+        searchString=searchString+labelParser(HealthLabel,LabelIdentifier)
+        searchString=searchString+labelParser(HealthLabel,LabelIdentifier)
         conn.request("GET", searchString, headers=headers)
         print(searchString)
         res = conn.getresponse()
